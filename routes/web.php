@@ -23,14 +23,14 @@ Route::get('/', function () {
 
 Route::post('/upload', function (Request $request) {
     $request->validate([
-        'photo' => 'required|file|image|mimes:jpg,jpeg,png'
+        'photo' => 'required|file|image|max:5000|mimes:jpg,jpeg,png'
     ]);
 
     // rename photo
     $photo = Str::random(12) . '.jpg';
 
-    // save photo
-    Image::make($request->photo)->resize(500, 500)->save('uploads/photos/' . $photo);
+    // save photo with 80% quality
+    Image::make($request->photo)->save('uploads/photos/' . $photo, 80);
 
     // save photo's name to database
     Photo::create([
